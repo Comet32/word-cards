@@ -1,14 +1,25 @@
-import React from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import React from 'react'
+import { StyleSheet, View, Platform, AsyncStorage } from 'react-native'
 import {
   createBottomTabNavigator,
   createMaterialTopTabNavigator,
   createAppContainer,
   createStackNavigator
-} from 'react-navigation';
+} from 'react-navigation'
 import DecksScreen from './components/DecksScreen'
 import NewDeckScreen from './components/NewDeckScreen'
 import { yellow, white, black } from './utils/colors'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import reducer from './reducers'
+import { CARDS_STORAGE_KEY } from './utils/_cards'
+
+const store = createStore(reducer)
+
+// 每当 store 发生改变，则改变本地存储
+store.subscribe(() => {
+  AsyncStorage.setItem(CARDS_STORAGE_KEY, JSON.stringify(store.getState()))
+})
 
 const RouteConfigs = {
   DecksScreen: {
@@ -34,7 +45,7 @@ const TabNavigatorConfig = {
     inactiveTintColor: black,
     style: {
       height: 56,
-      backgroundColor: white,
+      backgroundColor: white
     }
   }
 }
@@ -49,11 +60,13 @@ const MainNavigator = createAppContainer(Tabs)
 export default class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <View style={{ height: 20 }} />
-        <MainNavigator />
-      </View>
-    );
+      <Provider store={store}>
+        <View style={styles.container}>
+          <View style={{ height: 20 }} />
+          <MainNavigator />
+        </View>
+      </Provider>
+    )
   }
 }
 
@@ -61,5 +74,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff'
-  },
-});
+  }
+})

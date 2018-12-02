@@ -1,44 +1,39 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity
+} from 'react-native'
 import Card from './Card'
-import { fetchCardsResults } from "../utils/api";
+import { fetchCardsResults } from '../utils/api'
+import { connect } from "react-redux";
+import { receiveCardsAction } from "../actions";
 
-export default class DecksScreen extends Component {
-  state = {
-    cards: {}
-  }
-
+class DecksScreen extends Component {
   componentDidMount() {
-    fetchCardsResults()
-      .then(results => {
-        // 将 results 对象改变为对象数组
-        const cards = Object.keys(results).map(item => results[item])
-        this.setState(() => ({
-          cards
-        }))
-      })
+    fetchCardsResults().then(results => {
+      this.props.dispatch(receiveCardsAction(results))
+    })
   }
 
   renderItem = ({ item }) => {
-    return (<TouchableOpacity>
-      <Card title={item.title} questions={item.questions} />
-    </TouchableOpacity>)
+    return (
+      <TouchableOpacity>
+        <Card title={item.title} questions={item.questions} />
+      </TouchableOpacity>
+    )
   }
 
   render() {
-    // const date = [{
-    //   key: '123',
-    // }, {
-    //   key: '231',
-    // }, {
-    //   key: '132'
-    // }]
-    const { cards } = this.state
+    const { decks } = this.props
     return (
       <View style={style.container}>
-        <FlatList data={cards}
+        <FlatList
+          data={decks}
           renderItem={this.renderItem}
-          keyExtractor={(item, index) => index.toString()} />
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
     )
   }
@@ -47,6 +42,17 @@ export default class DecksScreen extends Component {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   }
 })
+
+mapStateToProps = (state) => {
+  // 将 state 对象改变为对象数组
+  const decks = Object.keys(state).map(item => state[item])
+  return {
+    decks
+  }
+}
+
+
+export default connect(mapStateToProps)(DecksScreen)
