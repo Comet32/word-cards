@@ -20,7 +20,14 @@ export default class CardScreen extends Component {
           <Text style={styles.cardName}>{title}</Text>
           <Text style={styles.cardAmount}>{questions.length} cards</Text>
         </View>
-        <TouchableOpacity style={styles.addBtn}>
+        <TouchableOpacity
+          onPress={() =>
+            this.props.navigation.navigate('addCardScreen', {
+              title
+            })
+          }
+          style={styles.addBtn}
+        >
           <Text style={{ fontSize: 18 }}>Add Card</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.startBtn}>

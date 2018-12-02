@@ -7,14 +7,16 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity
 } from 'react-native'
-import { black, white } from '../utils/colors'
+import { black, white, red } from '../utils/colors'
 import { addCardsAction } from '../actions'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
+import Input from './Input'
 
 class NewDeckScreen extends Component {
   state = {
-    inputValue: ''
+    inputValue: '',
+    isHint: false
   }
 
   handleChangeInput = input => {
@@ -24,10 +26,18 @@ class NewDeckScreen extends Component {
   }
 
   handleSubmitPress = () => {
+    if (this.state.inputValue === '') {
+      this.setState(() => ({
+        isHint: true
+      }))
+      return
+    }
+
     this.props.dispatch(addCardsAction(this.state.inputValue))
 
     this.setState(() => ({
-      inputValue: ''
+      inputValue: '',
+      isHint: false
     }))
 
     this.toHome()
@@ -35,12 +45,12 @@ class NewDeckScreen extends Component {
 
   toHome = () => {
     this.props.navigation.dispatch(
-      NavigationActions.navigate({routeName:'DecksScreen'})
+      NavigationActions.navigate({ routeName: 'DecksScreen' })
     )
   }
 
   render() {
-    const { inputValue } = this.state
+    const { inputValue, isHint } = this.state
 
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -49,14 +59,18 @@ class NewDeckScreen extends Component {
             What is the title of your new deck?
           </Text>
         </View>
-        <View style={styles.inputView}>
-          <TextInput
+          <Input
             value={inputValue}
             onChangeText={this.handleChangeInput}
-            style={styles.textInput}
             placeholder="Deck Title"
           />
-        </View>
+        {isHint && (
+          <View style={styles.hint}>
+            <Text style={{ color: red, fontSize: 16 }}>
+              The title cannot be empty !
+            </Text>
+          </View>
+        )}
         <TouchableOpacity onPress={this.handleSubmitPress} style={styles.btn}>
           <Text style={styles.btnText}>Submit</Text>
         </TouchableOpacity>
@@ -80,31 +94,22 @@ const styles = StyleSheet.create({
     fontSize: 50,
     textAlign: 'center'
   },
-  inputView: {
-    width: 380,
-    borderWidth: 1,
-    borderColor: black,
-    borderRadius: 4,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 4,
-    paddingRight: 4,
-    marginBottom: 50
-  },
-  textInput: {
-    borderBottomWidth: 1
-  },
   btn: {
     width: 143,
     height: 54,
     backgroundColor: black,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 4
+    borderRadius: 8,
+    marginTop: 40
   },
   btnText: {
     color: white,
     fontSize: 20
+  },
+  hint: {
+    alignSelf: 'flex-start',
+    paddingLeft: 20
   }
 })
 

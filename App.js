@@ -14,12 +14,14 @@ import { createStore } from 'redux'
 import reducer from './reducers'
 import { CARDS_STORAGE_KEY } from './utils/_cards'
 import CardScreen from './components/CardScreen'
+import addCardScreen  from "./components/addCardScreen";
 
 const store = createStore(reducer)
 
 // 每当 store 发生改变，则改变本地存储
 store.subscribe(() => {
   AsyncStorage.setItem(CARDS_STORAGE_KEY, JSON.stringify(store.getState()))
+  // AsyncStorage.removeItem(CARDS_STORAGE_KEY)
 })
 
 const RouteConfigs = {
@@ -71,6 +73,16 @@ const StackNavigator = createStackNavigator({
         backgroundColor: black
       }
     }
+  },
+  addCardScreen:{
+    screen: addCardScreen,
+    navigationOptions: {
+      title: 'Add Card',
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: black
+      }
+    }
   }
 })
 
@@ -81,7 +93,7 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <View style={styles.container}>
-          <View style={{ height: 20, backgroundColor: black }} />
+          <View style={{ height: 25, backgroundColor: black }} />
           <MainNavigator />
         </View>
       </Provider>
