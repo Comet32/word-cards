@@ -10,6 +10,7 @@ import {
 import { black, white } from '../utils/colors'
 import { addCardsAction } from '../actions'
 import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 
 class NewDeckScreen extends Component {
   state = {
@@ -28,6 +29,14 @@ class NewDeckScreen extends Component {
     this.setState(() => ({
       inputValue: ''
     }))
+
+    this.toHome()
+  }
+
+  toHome = () => {
+    this.props.navigation.dispatch(
+      NavigationActions.navigate({routeName:'DecksScreen'})
+    )
   }
 
   render() {

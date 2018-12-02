@@ -13,6 +13,7 @@ import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import reducer from './reducers'
 import { CARDS_STORAGE_KEY } from './utils/_cards'
+import CardScreen from './components/CardScreen'
 
 const store = createStore(reducer)
 
@@ -55,14 +56,32 @@ const Tabs =
     ? createBottomTabNavigator(RouteConfigs, TabNavigatorConfig)
     : createMaterialTopTabNavigator(RouteConfigs, TabNavigatorConfig)
 
-const MainNavigator = createAppContainer(Tabs)
+const StackNavigator = createStackNavigator({
+  Home: {
+    screen: Tabs,
+    navigationOptions: {
+      header: null
+    }
+  },
+  CardScreen: {
+    screen: CardScreen,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: black
+      }
+    }
+  }
+})
+
+const MainNavigator = createAppContainer(StackNavigator)
 
 export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
         <View style={styles.container}>
-          <View style={{ height: 20 }} />
+          <View style={{ height: 20, backgroundColor: black }} />
           <MainNavigator />
         </View>
       </Provider>

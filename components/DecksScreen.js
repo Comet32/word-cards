@@ -1,14 +1,9 @@
 import React, { Component } from 'react'
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity
-} from 'react-native'
+import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import Card from './Card'
 import { fetchCardsResults } from '../utils/api'
-import { connect } from "react-redux";
-import { receiveCardsAction } from "../actions";
+import { connect } from 'react-redux'
+import { receiveCardsAction } from '../actions'
 
 class DecksScreen extends Component {
   componentDidMount() {
@@ -19,7 +14,14 @@ class DecksScreen extends Component {
 
   renderItem = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          this.props.navigation.navigate('CardScreen', {
+            title: item.title,
+            questions: item.questions
+          })
+        }
+      >
         <Card title={item.title} questions={item.questions} />
       </TouchableOpacity>
     )
@@ -46,13 +48,12 @@ const style = StyleSheet.create({
   }
 })
 
-mapStateToProps = (state) => {
+mapStateToProps = state => {
   // 将 state 对象改变为对象数组
   const decks = Object.keys(state).map(item => state[item])
   return {
     decks
   }
 }
-
 
 export default connect(mapStateToProps)(DecksScreen)
