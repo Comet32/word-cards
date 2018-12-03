@@ -6,18 +6,60 @@ export default class QuizScreen extends Component {
   state = {
     currentQuestion: 0,
     correctQuestion: 0,
-    isAnswer: false
+    isAnswer: false,
+    isEnd: false
   }
 
   handleAnswerSwitch = () => {
-    this.setState((state)=>({
+    this.setState(state => ({
       isAnswer: !state.isAnswer
     }))
   }
 
-  render() {
-    const { currentQuestion, correctQuestion, isAnswer } = this.state
+  handleCorrect = () => {
+    this.setState(state => ({
+      isAnswer: false,
+      currentQuestion: state.currentQuestion + 1,
+      correctQuestion: state.correctQuestion + 1
+    }))
+    
+    this.judgeEqual()
+  }
+
+  handleIncorrect = () => {
+    this.setState(state => ({
+      isAnswer: false,
+      currentQuestion: state.currentQuestion + 1
+    }))
+    
+    this.judgeEqual()
+  }
+
+  judgeEqual() {
     const { questions } = this.props.navigation.state.params
+    if (this.state.currentQuestion + 1 === questions.length) {
+      this.setState(state => ({
+        isEnd: true,
+        endCorrectAmount: state.correctQuestion
+      }))
+    }
+  }
+
+  render() {
+    const { currentQuestion, correctQuestion, isAnswer,isEnd } = this.state
+    const { questions } = this.props.navigation.state.params
+
+    if(isEnd){
+      successRate = Math.round((correctQuestion / questions.length) * 100)
+
+      return(
+        <View style={[styles.container,{justifyContent: 'center'}]}>
+          <Text style={styles.endText}>Total Cards： {questions.length}</Text>
+          <Text style={styles.endText}>Your Correct Cards： {correctQuestion}</Text>
+          <Text style={styles.endText}>Correct Rate：{successRate + '%'}</Text>
+        </View>
+      )
+    }
 
     return (
       <View style={styles.container}>
@@ -33,17 +75,21 @@ export default class QuizScreen extends Component {
           </Text>
           <TouchableOpacity onPress={this.handleAnswerSwitch}>
             <Text style={{ fontSize: 18, color: red, textAlign: 'center' }}>
-            {isAnswer
-              ? 'Question'
-              : 'Answer'}
+              {isAnswer ? 'Question' : 'Answer'}
             </Text>
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={[styles.Btn, styles.correctBtn]}>
+          <TouchableOpacity
+            onPress={this.handleCorrect}
+            style={[styles.Btn, styles.correctBtn]}
+          >
             <Text style={{ color: white, fontSize: 18 }}>Correct</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.Btn, styles.incorrectBtn]}>
+          <TouchableOpacity
+            onPress={this.handleIncorrect}
+            style={[styles.Btn, styles.incorrectBtn]}
+          >
             <Text style={{ color: white, fontSize: 18 }}>Incorrect</Text>
           </TouchableOpacity>
         </View>
@@ -77,5 +123,8 @@ const styles = StyleSheet.create({
   incorrectBtn: {
     backgroundColor: red,
     marginBottom: 30
+  },
+  endText: {
+    fontSize: 30,
   }
 })

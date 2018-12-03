@@ -88,7 +88,7 @@ const StackNavigator = createStackNavigator({
   QuizScreen: {
     screen: QuizScreen,
     navigationOptions: {
-      title: 'Add Card',
+      title: 'Quiz',
       headerTintColor: white,
       headerStyle: {
         backgroundColor: black
