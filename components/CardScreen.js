@@ -1,8 +1,9 @@
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { Component } from 'react'
 import { black, lightGray, white } from '../utils/colors'
+import { connect } from 'react-redux'
 
-export default class CardScreen extends Component {
+class CardScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { title } = navigation.state.params
 
@@ -12,7 +13,8 @@ export default class CardScreen extends Component {
   }
 
   render() {
-    const { title, questions } = this.props.navigation.state.params
+    const { title } = this.props.navigation.state.params
+    const { questions } = this.props
 
     return (
       <View style={styles.container}>
@@ -22,7 +24,7 @@ export default class CardScreen extends Component {
         </View>
         <TouchableOpacity
           onPress={() =>
-            this.props.navigation.navigate('addCardScreen', {
+            this.props.navigation.navigate('AddCardScreen', {
               title
             })
           }
@@ -30,7 +32,15 @@ export default class CardScreen extends Component {
         >
           <Text style={{ fontSize: 18 }}>Add Card</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.startBtn}>
+        <TouchableOpacity
+          onPress={() =>
+            this.props.navigation.navigate('QuizScreen', {
+              title,
+              questions
+            })
+          }
+          style={styles.startBtn}
+        >
           <Text style={{ fontSize: 18, color: white }}>Start Quiz</Text>
         </TouchableOpacity>
       </View>
@@ -73,3 +83,13 @@ const styles = StyleSheet.create({
     backgroundColor: black
   }
 })
+
+mapStateToProps = (state, props) => {
+  const { title } = props.navigation.state.params
+
+  return {
+    questions: state[title].questions
+  }
+}
+
+export default connect(mapStateToProps)(CardScreen)

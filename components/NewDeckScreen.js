@@ -46,6 +46,7 @@ class NewDeckScreen extends Component {
   toHome = () => {
     this.props.navigation.dispatch(
       NavigationActions.navigate({ routeName: 'DecksScreen' })
+      // NavigationActions.back({key: 'NewDeckScreen'})
     )
   }
 

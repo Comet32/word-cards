@@ -14,7 +14,8 @@ import { createStore } from 'redux'
 import reducer from './reducers'
 import { CARDS_STORAGE_KEY } from './utils/_cards'
 import CardScreen from './components/CardScreen'
-import addCardScreen  from "./components/addCardScreen";
+import AddCardScreen from './components/AddCardScreen'
+import QuizScreen from './components/QuizScreen'
 
 const store = createStore(reducer)
 
@@ -74,8 +75,18 @@ const StackNavigator = createStackNavigator({
       }
     }
   },
-  addCardScreen:{
-    screen: addCardScreen,
+  AddCardScreen: {
+    screen: AddCardScreen,
+    navigationOptions: {
+      title: 'Add Card',
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: black
+      }
+    }
+  },
+  QuizScreen: {
+    screen: QuizScreen,
     navigationOptions: {
       title: 'Add Card',
       headerTintColor: white,
