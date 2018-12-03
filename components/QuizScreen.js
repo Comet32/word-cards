@@ -9,6 +9,7 @@ import {
 import { green, red, white, black } from '../utils/colors'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { NavigationActions } from 'react-navigation'
+import { clearLocalNotification, setLocalNotification } from "../utils/helper";
 
 export default class QuizScreen extends Component {
   state = {
@@ -87,6 +88,9 @@ export default class QuizScreen extends Component {
         Animated.timing(bounceValue, { duration: 200, toValue: 1.04 }),
         Animated.spring(bounceValue, { toValue: 1, friction: 4 })
       ]).start()
+
+      // 如果测试结束，说明完成了一次测试则取消当天的通知消息,并设置第二天的通知
+        clearLocalNotification().then(setLocalNotification)
 
       return (
         <Animated.View

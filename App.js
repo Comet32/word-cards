@@ -16,6 +16,7 @@ import { CARDS_STORAGE_KEY } from './utils/_cards'
 import CardScreen from './components/CardScreen'
 import AddCardScreen from './components/AddCardScreen'
 import QuizScreen from './components/QuizScreen'
+import { setLocalNotification } from './utils/helper'
 
 const store = createStore(reducer)
 
@@ -100,6 +101,11 @@ const StackNavigator = createStackNavigator({
 const MainNavigator = createAppContainer(StackNavigator)
 
 export default class App extends React.Component {
+  componentDidMount() {
+    // 设置通知
+    setLocalNotification()
+  }
+
   render() {
     return (
       <Provider store={store}>
