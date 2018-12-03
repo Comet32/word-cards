@@ -32,19 +32,19 @@ class CardScreen extends Component {
         >
           <Text style={{ fontSize: 18 }}>Add Card</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            // if (question[0] !== undefined) {
+        {questions[0] !== undefined && (
+          <TouchableOpacity
+            onPress={() => {
               this.props.navigation.navigate('QuizScreen', {
                 title,
                 questions
               })
-            // }
-          }}
-          style={styles.startBtn}
-        >
-          <Text style={{ fontSize: 18, color: white }}>Start Quiz</Text>
-        </TouchableOpacity>
+            }}
+            style={styles.startBtn}
+          >
+            <Text style={{ fontSize: 18, color: white }}>Start Quiz</Text>
+          </TouchableOpacity>
+        )}
       </View>
     )
   }
