@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
+import { View, FlatList, TouchableOpacity } from 'react-native'
 import Card from './Card'
 import { fetchCardsResults } from '../utils/api'
 import { connect } from 'react-redux'
 import { receiveCardsAction } from '../actions'
+import containers from '../styles/containers' 
 
 class DecksScreen extends Component {
   componentDidMount() {
@@ -30,7 +31,7 @@ class DecksScreen extends Component {
   render() {
     const { decks } = this.props
     return (
-      <View style={style.container}>
+      <View style={[containers.comCtn, { justifyContent: 'flex-start' }]}>
         <FlatList
           data={decks}
           renderItem={this.renderItem}
@@ -40,13 +41,6 @@ class DecksScreen extends Component {
     )
   }
 }
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start'
-  }
-})
 
 mapStateToProps = state => {
   // 将 state 对象改变为对象数组

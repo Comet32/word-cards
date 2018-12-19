@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import Input from './Input'
-import { black, white, red } from '../utils/colors'
 import { addCardAction } from '../actions'
 import { NavigationActions } from 'react-navigation'
+import containers from '../styles/containers'
+import text from '../styles/text'
 
-export class addCardScreen extends Component {
+export class AddCardScreen extends Component {
   state = {
     questionValue: '',
     answerValue: '',
@@ -30,15 +31,15 @@ export class addCardScreen extends Component {
     const { title } = this.props.navigation.state.params
     const { questionValue, answerValue } = this.state
 
-    if(questionValue === ''){
-      this.setState(()=>({
+    if (questionValue === '') {
+      this.setState(() => ({
         isQuestionHint: true
       }))
       return
     }
 
-    if(answerValue === ''){
-      this.setState(()=>({
+    if (answerValue === '') {
+      this.setState(() => ({
         isAnswerHint: true
       }))
       return
@@ -58,71 +59,48 @@ export class addCardScreen extends Component {
     this.props.navigation.dispatch(
       // NavigationActions.back({ key: 'AddCardScreen' })
       NavigationActions.navigate({ routeName: 'CardScreen' })
-      )
-    
+    )
   }
 
   render() {
-    const { questionValue, answerValue,isQuestionHint, isAnswerHint } = this.state
+    const {
+      questionValue,
+      answerValue,
+      isQuestionHint,
+      isAnswerHint
+    } = this.state
 
     return (
-      <View style={styles.container}>
+      <View style={[containers.comCtn, { alignItems: 'center' }]}>
         <View style={{ height: 25 }} />
         <Input
           value={questionValue}
           onChangeText={this.handleChangeQuestion}
           placeholder="Question"
         />
-        {isQuestionHint && (
-          <View style={styles.hint}>
-            <Text style={{ color: red, fontSize: 14 }}>
-              The question cannot be empty !
-            </Text>
+        {isQuestionHint === true ? (
+          <View style={containers.hintCtn}>
+            <Text style={text.hintText}>The question cannot be empty !</Text>
           </View>
+        ) : (
+          <View style={{ height: 30 }} />
         )}
-        <View style={{ height: 40 }} />
         <Input
           value={answerValue}
           onChangeText={this.handleChangeAnswer}
           placeholder="Answer"
         />
         {isAnswerHint && (
-          <View style={styles.hint}>
-            <Text style={{ color: red, fontSize: 14 }}>
-              The answer cannot be empty !
-            </Text>
+          <View style={containers.hintCtn}>
+            <Text style={text.hintText}>The answer cannot be empty !</Text>
           </View>
         )}
-        <TouchableOpacity onPress={this.handleSubmit} style={styles.btn}>
-          <Text style={styles.btnText}>Submit</Text>
+        <TouchableOpacity onPress={this.handleSubmit} style={containers.btnCtn}>
+          <Text style={text.btnText}>Submit</Text>
         </TouchableOpacity>
       </View>
     )
   }
 }
 
-export default connect()(addCardScreen)
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center'
-  },
-  btn: {
-    width: 143,
-    height: 54,
-    backgroundColor: black,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    marginTop: 40
-  },
-  btnText: {
-    color: white,
-    fontSize: 20
-  },
-  hint: {
-    alignSelf: 'flex-start',
-    paddingLeft: 20
-  }
-})
+export default connect()(AddCardScreen)

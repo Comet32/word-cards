@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
-  Animated
+  Animated,
+  ScrollView
 } from 'react-native'
 import { green, red, white, black } from '../utils/colors'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { NavigationActions } from 'react-navigation'
-import { clearLocalNotification, setLocalNotification } from "../utils/helper";
+import { clearLocalNotification, setLocalNotification } from '../utils/helper'
+import containers from '../styles/containers'
+import text from '../styles/text'
 
 export default class QuizScreen extends Component {
   state = {
@@ -90,13 +92,13 @@ export default class QuizScreen extends Component {
       ]).start()
 
       // 如果测试结束，说明完成了一次测试则取消当天的通知消息,并设置第二天的通知
-        clearLocalNotification().then(setLocalNotification)
+      clearLocalNotification().then(setLocalNotification)
 
       return (
         <Animated.View
           style={[
-            styles.container,
-            { justifyContent: 'center', transform: [{ scale: bounceValue }] }
+            containers.centerCtn,
+            { transform: [{ scale: bounceValue }] }
           ]}
         >
           <MaterialCommunityIcons
@@ -104,20 +106,26 @@ export default class QuizScreen extends Component {
             size={80}
             color={green}
           />
-          <Text style={styles.endText}>Total Cards： {questions.length}</Text>
-          <Text style={styles.endText}>
+          <Text style={text.endText}>Total Cards： {questions.length}</Text>
+          <Text style={text.endText}>
             Your Correct Cards： {correctQuestion}
           </Text>
-          <Text style={styles.endText}>Correct Rate：{successRate + '%'}</Text>
+          <Text style={text.endText}>Correct Rate：{successRate + '%'}</Text>
           <TouchableOpacity
             onPress={this.handleReturn}
-            style={[styles.Btn, { backgroundColor: black, marginTop: 50 }]}
+            style={[
+              containers.quizBtn,
+              { backgroundColor: black, marginTop: 50 }
+            ]}
           >
             <Text style={{ color: white, fontSize: 18 }}>Return to Deck</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={this.handleReTest}
-            style={[styles.Btn, { backgroundColor: black, marginTop: 20 }]}
+            style={[
+              containers.quizBtn,
+              { backgroundColor: black, marginTop: 20 }
+            ]}
           >
             <Text style={{ color: white, fontSize: 18 }}>Retest</Text>
           </TouchableOpacity>
@@ -126,69 +134,42 @@ export default class QuizScreen extends Component {
     }
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.sequenceText}>
-          {' '}
-          {currentQuestion + 1} / {questions.length}{' '}
-        </Text>
-        <View>
-          <Text style={{ fontSize: 50, textAlign: 'center' }}>
-            {isAnswer
-              ? questions[currentQuestion].answer
-              : questions[currentQuestion].question}
+      <ScrollView>
+        <View
+          style={[containers.centerCtn, { justifyContent: 'space-between' }]}
+        >
+          <Text style={text.sequenceText}>
+            {' '}
+            {currentQuestion + 1} / {questions.length}{' '}
           </Text>
-          <TouchableOpacity onPress={this.handleAnswerSwitch}>
-            <Text style={{ fontSize: 18, color: red, textAlign: 'center' }}>
-              {isAnswer ? 'Question' : 'Answer'}
+          <View>
+            <Text style={{ fontSize: 50, textAlign: 'center' }}>
+              {isAnswer
+                ? questions[currentQuestion].answer
+                : questions[currentQuestion].question}
             </Text>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={this.handleAnswerSwitch}>
+              <Text style={{ fontSize: 18, color: red, textAlign: 'center' }}>
+                {isAnswer ? 'Question' : 'Answer'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity
+              onPress={this.handleCorrect}
+              style={[containers.quizBtn, containers.correctBtn]}
+            >
+              <Text style={{ color: white, fontSize: 18 }}>Correct</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={this.handleIncorrect}
+              style={[containers.quizBtn, containers.incorrectBtn]}
+            >
+              <Text style={{ color: white, fontSize: 18 }}>Incorrect</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View>
-          <TouchableOpacity
-            onPress={this.handleCorrect}
-            style={[styles.Btn, styles.correctBtn]}
-          >
-            <Text style={{ color: white, fontSize: 18 }}>Correct</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={this.handleIncorrect}
-            style={[styles.Btn, styles.incorrectBtn]}
-          >
-            <Text style={{ color: white, fontSize: 18 }}>Incorrect</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </ScrollView>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  sequenceText: {
-    alignSelf: 'flex-start',
-    marginTop: 10,
-    fontSize: 18
-  },
-  Btn: {
-    width: 257,
-    height: 54,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8
-  },
-  correctBtn: {
-    marginBottom: 13,
-    backgroundColor: green
-  },
-  incorrectBtn: {
-    backgroundColor: red,
-    marginBottom: 30
-  },
-  endText: {
-    fontSize: 30
-  }
-})

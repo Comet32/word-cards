@@ -1,7 +1,9 @@
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableOpacity } from 'react-native'
 import React, { Component } from 'react'
-import { black, lightGray, white } from '../utils/colors'
 import { connect } from 'react-redux'
+import containers from '../styles/containers'
+import text from '../styles/text'
+import { white } from '../utils/colors'
 
 class CardScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -17,10 +19,12 @@ class CardScreen extends Component {
     const { questions } = this.props
 
     return (
-      <View style={styles.container}>
+      <View style={containers.centerCtn}>
         <View style={{ marginBottom: 200 }}>
-          <Text style={styles.cardName}>{title}</Text>
-          <Text style={styles.cardAmount}>{questions.length} cards</Text>
+          <Text style={[text.cardName, { fontSize: 45 }]}>{title}</Text>
+          <Text style={[text.cardAmount, { fontSize: 22 }]}>
+            {questions.length} cards
+          </Text>
         </View>
         <TouchableOpacity
           onPress={() =>
@@ -28,7 +32,7 @@ class CardScreen extends Component {
               title
             })
           }
-          style={styles.addBtn}
+          style={containers.addBtnCtn}
         >
           <Text style={{ fontSize: 18 }}>Add Card</Text>
         </TouchableOpacity>
@@ -40,7 +44,7 @@ class CardScreen extends Component {
                 questions
               })
             }}
-            style={styles.startBtn}
+            style={containers.startBtnCtn}
           >
             <Text style={{ fontSize: 18, color: white }}>Start Quiz</Text>
           </TouchableOpacity>
@@ -49,42 +53,6 @@ class CardScreen extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  cardName: {
-    fontSize: 45,
-    color: black,
-    textAlign: 'center',
-    marginBottom: 15
-  },
-  cardAmount: {
-    fontSize: 22,
-    color: lightGray,
-    textAlign: 'center'
-  },
-  addBtn: {
-    width: 256,
-    height: 69,
-    borderWidth: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    marginBottom: 13
-  },
-  startBtn: {
-    width: 256,
-    height: 69,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    backgroundColor: black
-  }
-})
 
 mapStateToProps = (state, props) => {
   const { title } = props.navigation.state.params

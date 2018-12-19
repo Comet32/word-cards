@@ -6,17 +6,17 @@ import {
   createAppContainer,
   createStackNavigator
 } from 'react-navigation'
-import DecksScreen from './components/DecksScreen'
-import NewDeckScreen from './components/NewDeckScreen'
-import { yellow, white, black } from './utils/colors'
+import DecksScreen from './src/components/DecksScreen'
+import NewDeckScreen from './src/components/NewDeckScreen'
+import { yellow, white, black } from './src/utils/colors'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import reducer from './reducers'
-import { CARDS_STORAGE_KEY } from './utils/_cards'
-import CardScreen from './components/CardScreen'
-import AddCardScreen from './components/AddCardScreen'
-import QuizScreen from './components/QuizScreen'
-import { setLocalNotification } from './utils/helper'
+import reducer from './src/reducers'
+import { CARDS_STORAGE_KEY } from './src/utils/_cards'
+import CardScreen from './src/components/CardScreen'
+import AddCardScreen from './src/components/AddCardScreen'
+import QuizScreen from './src/components/QuizScreen'
+import { setLocalNotification } from './src/utils/helper'
 
 const store = createStore(reducer)
 

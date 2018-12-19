@@ -32,5 +32,6 @@ export function setDummyDate(results) {
     AsyncStorage.setItem(CARDS_STORAGE_KEY, JSON.stringify(Date))
     return Date
   }
+  
   return JSON.parse(results)
 }
